@@ -1,0 +1,255 @@
+<html><head>
+    <title>Farm World App</title>
+	<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&amp;display=swap" rel="stylesheet">
+
+	<link href="public/css/compile_global_v%3D1714881831.css" rel="stylesheet" media="all">
+	<link href="../cdn.jsdelivr.net/npm/sweetalert2%4011.10.5/dist/sweetalert2.min.css" rel="stylesheet">
+	<script src="../telegram.org/js/telegram-web-app.js"></script>
+	<script src="../unpkg.com/%40tonconnect/ui%402.0.2/dist/tonconnect-ui.min.js"></script>
+<!--	<script src="/public/vendor/connect/tonconnect-ui.min.js"></script>-->
+	<script src="public/vendor/sweetalert2.all.min.js"></script>
+	<script src="public/js/jquery-3.2.1.min.js"></script>
+	<script src="public/js/jquery-ui.min.js"></script>
+	<script src="../cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
+
+    <script src="public/vendor/jquery.countdown/jquery.countdown.js"></script>
+    <script src="public/vendor/modal/jquery.modal.min.js"></script>
+	<script src="public/js/common_v%3D1714881831.js"></script>
+    <link rel="icon" href="public/images/fav.png">
+    <script>
+        let config_energy = {
+            koef: 5,
+            init_energy: 200,
+            max_energy: 500,
+            init_food: 0
+        };
+    </script>
+	    <!-- Google tag (gtag.js) -->
+    <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-FDX85PJ2YG"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-FDX85PJ2YG');
+    </script>
+</head>
+<body>
+<div id="one_tool_modal" class="modal">
+    <div class="close_modal">
+        <a href="#" rel="modal:close">
+            <img src="public/images/close_btn.png">
+        </a>
+    </div>
+    <div id="title_page_box">
+        <div class="title_page"><span></span></div>
+    </div>
+    <div class="box_content">
+        <div class="left_box">
+            <div class="one_tool_info">
+                <span id="rarity_text"></span>
+                <span id="token_icon"></span>
+                <div class="text_info">
+                    <div class="text_info_icon">
+                        <span id="tools_icon"></span>
+                    </div>
+                    <div class="text_info_text">
+                        <p>Перезарядка <span id="cooldown_tool"></span> hour</p>
+                        <p>Минус энергии <span id="energy_cost_tool"></span></p>
+                        <p>Минус прочности <span id="durability_cost_tool"></span></p>
+                        <p>Добыча <span id="profit_tool"></span></p>
+                    </div>
+                </div>
+                <div class="durability_info">
+                    <div class="durability_line">
+                        <span class="value_energy">Прочность <span id="tek_durability_tool"></span>/<span id="max_durability_tool"></span></span>
+                        <span class="line_energy">
+                            <span class="v" id="tek_durability_tool_in_percent" style="width:  32%"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="right_box">
+            <span id="is_sale_tool">В ПРОДАЖЕ</span>
+            <div id="mining_tool_timer"></div>
+            <div class="buttons_tool">
+
+                <div id="repeare_btn"></div>
+                <div id="sell_btn"></div>
+                <div id="storage_btn"></div>
+            </div>
+        </div>
+    </div>
+    <div class="box_footer">
+        <div class="left_box">
+            <div class="slider_mine">
+                <div id="slider">
+                    <div id="custom-handle" class="ui-slider-handle"></div>
+                </div>
+            </div>
+        </div>
+        <div class="right_box">
+            <div id="mine_btn"></div>
+        </div>
+    </div>
+</div>
+<div id="list_tools_modal" class="modal">
+    <div class="close_modal">
+        <a href="#" rel="modal:close">
+            <img src="public/images/close_btn.png">
+        </a>
+    </div>
+    <div id="title_page_box">
+        <div class="title_page"><span></span></div>
+    </div>
+    <div class="box_content">
+        <div id="tools_lists_box"></div>
+    </div>
+</div>
+<div id="one_tool_bafs_modal" class="modal">
+    <div class="close_modal">
+        <a href="#" rel="modal:close">
+            <img src="public/images/close_btn.png">
+        </a>
+    </div>
+    <div id="title_page_box">
+        <div class="title_page"><span>Buffs</span></div>
+    </div>
+    <div class="box_content">
+        <div class="bafs_list_box">
+			                <div class="one_baf_box">
+                    <div class="baf_name">Mining Buff</div>
+                    <div class="icon_baf"><img src="public/images/bafs/1.png"></div>
+                    <div class="label_text">Bonus:</div>
+                    <div class="baf_info_stat">
+						<p><span>+30%</span> for mining</p>                    </div>
+                    <div class="label_text">Cooldown:</div>
+                    <div class="baf_time"><span class="icon"><img src="public/images/btn_timer_gray.png" width="32"></span><span class="value">30 days</span></div>
+                    <div class="label_text">Price:</div>
+                    <div class="price_box">
+						<span class="resourse_one"><span class="icon"><img src="public/images/tokens/planks.png" width="32"></span><span class="value">5</span></span><span class="resourse_one"><span class="icon"><img src="public/images/tokens/ton_g.png" width="32"></span><span class="value">1</span></span>                    </div>
+                    <div class="button_activate_baf">
+                        <button class="btn btn_green activate_baf_btn" data-id="1" data-id-tool="">Activate</button>
+                    </div>
+                </div>
+				                <div class="one_baf_box">
+                    <div class="baf_name">Energy Buff</div>
+                    <div class="icon_baf"><img src="public/images/bafs/2.png"></div>
+                    <div class="label_text">Bonus:</div>
+                    <div class="baf_info_stat">
+						<p><span>-100%</span> energy cost</p>                    </div>
+                    <div class="label_text">Cooldown:</div>
+                    <div class="baf_time"><span class="icon"><img src="public/images/btn_timer_gray.png" width="32"></span><span class="value">30 days</span></div>
+                    <div class="label_text">Price:</div>
+                    <div class="price_box">
+						<span class="resourse_one"><span class="icon"><img src="public/images/tokens/soup.png" width="32"></span><span class="value">5</span></span><span class="resourse_one"><span class="icon"><img src="public/images/tokens/ton_g.png" width="32"></span><span class="value">1</span></span>                    </div>
+                    <div class="button_activate_baf">
+                        <button class="btn btn_green activate_baf_btn" data-id="2" data-id-tool="">Activate</button>
+                    </div>
+                </div>
+				                <div class="one_baf_box">
+                    <div class="baf_name">Durability Buff</div>
+                    <div class="icon_baf"><img src="public/images/bafs/3.png"></div>
+                    <div class="label_text">Bonus:</div>
+                    <div class="baf_info_stat">
+						<p><span>-100%</span> durability cost</p>                    </div>
+                    <div class="label_text">Cooldown:</div>
+                    <div class="baf_time"><span class="icon"><img src="public/images/btn_timer_gray.png" width="32"></span><span class="value">30 days</span></div>
+                    <div class="label_text">Price:</div>
+                    <div class="price_box">
+						<span class="resourse_one"><span class="icon"><img src="public/images/tokens/ingot.png" width="32"></span><span class="value">5</span></span><span class="resourse_one"><span class="icon"><img src="public/images/tokens/ton_g.png" width="32"></span><span class="value">1</span></span>                    </div>
+                    <div class="button_activate_baf">
+                        <button class="btn btn_green activate_baf_btn" data-id="3" data-id-tool="">Activate</button>
+                    </div>
+                </div>
+				        </div>
+    </div>
+</div>
+<div id="ton_connect_box" style="display: none;"></div>
+<div id="global_box">
+<div class="title_page">
+    <span>Check telegram auth</span>
+</div>
+<script src="public/js/telegram_v%3D1714881831.js"></script>
+
+</div>
+<div id="foot_menu">
+    <ul>
+        <li>
+            <a href="/play"><span><img src="public/images/home_icon.png"></span></a>
+        </li>
+        <li>
+            <a href="/craft"><span><img src="public/images/craft_icon.png"></span></a>
+        </li>
+        <li>
+            <a href="/market"><span><img src="public/images/market_icon.png"></span></a>
+        </li>
+        <li>
+            <a href="/referrals"><span><img src="public/images/ref_icon.png"></span></a>
+        </li>
+    </ul>
+</div>
+
+<script>
+    const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
+        manifestUrl: 'https://app.farm-world.space/tonconnect-manifest.json',
+        buttonRootId: 'ton_connect_box'
+    });
+    tonConnectUI.uiOptions = {
+        twaReturnUrl: 'https://t.me/Farm_world_bot/app',
+    };
+    let translate = {
+        Equip: 'Надеть',
+        Mine: 'Добывать',
+        Repair_for: 'Починить за',
+        gold: ' золота',
+        Sell: 'Продать',
+        Unequip: 'Снять',
+        Are_you_sure: 'Вы уверены?',
+        Do_you_want_to_repair: 'Вы хотите починить этот инструмент за',
+        Yes_repair: 'Да, починить',
+        Successfully: 'Успешно!',
+        You_received: 'Вы получили',
+        Energy: 'Энергия',
+        Do_you_want_to_offer_this_tool: 'Вы хотите продать этот инструмент за',
+        sale_for: '*sale for',
+        Yes_sell: 'Да, продать',
+        Do_you_want_to_offer: 'Вы хотите продать',
+        for_sale_for: 'за',
+        You_want_to_buy: 'Вы хотите купить',
+        for: 'за',
+        Yes_buy: 'Да, купить',
+        Buy: 'Купить',
+        Yes_craft: 'Да, создать',
+        Yes_take_part: 'Да, разобрать',
+        Do_you_want_to_craft: 'Вы хотите создать инструмент? Ваши ресурсы будут потрачены безвозвратно на создание',
+        This_tool_will_be_DESTROYED: 'Этот инструмент УНИЧТОЖИТЬСЯ и вы получите',
+        Your_resources_will_be_debited: 'Ваши ресурсы будут списаны со счета для разблокировки слота',
+        Yes_unlock: 'Да, разблокировать',
+        Are_you_sure_you_want_to_increase_your_maximum: 'Вы уверены что хотите увеличить максимальное количество энергии на +100',
+        You_will_spend_FOOD: 'Вы потратите 1500 FOOD',
+        Yes: 'Да',
+        To_build_the_foundation_you_will_spend: 'Для постройки фундамента вы потратите',
+        Yes_build: 'Да, строить',
+        To_build_a_factory_you_will_spend: 'Для постройки фактории вы потратите',
+        You_will_be_deducted: 'У вас будет изьято',
+        for_placing_an_order: 'за размещение ордера',
+        Your_resources_will_be_spent_on_increasing_the_level_of_the_trading_post: 'Ваши ресурсы будут потрачены на повышение уровня фактории',
+        Yes_increase: 'Да, повысить',
+        Your_resources_will_be_spent_on_creating_the_material: 'Ваши ресурсы будут потрачены на создание материала',
+        Yes_create: 'Да, создать',
+        Your_resources_will_be_spent_on_activating_a_temporary_improvement: 'Ваши ресурсы будут потрачены на активацию временного улучшения',
+        Yes_improve: 'Да, улучшить',
+    };
+</script>
+<script src="public/js/play_v%3D1714881831.js"></script>
+<script src="public/js/market_v%3D1714881831.js"></script>
+<script src="public/js/craft_v%3D1714881831.js"></script>
+
+
+</body></html>
